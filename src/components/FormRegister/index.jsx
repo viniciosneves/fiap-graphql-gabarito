@@ -5,9 +5,17 @@ import { Form, FormActions } from "../Form";
 import { FormLabel } from "../FormLabel";
 import { TextField } from "../TextField";
 import { Figure, Heading, Image } from "./styles";
+import { useMutation } from "@apollo/client";
+import { ADD_USER } from "../../mutations/addUser";
+import PropTypes from 'prop-types';
 
-export const FormRegister = () => {
+export const FormRegister = ({ onRegister }) => {
     const [user, setUser] = useState({ name: '', email: '', password: '' });
+    const [addUser, { data, loading, error }] = useMutation(ADD_USER, {
+        onCompleted: () => {
+            onRegister()
+        }
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,8 +25,13 @@ export const FormRegister = () => {
         }));
     };
 
-    const registerUser = (evt) => {
+    const registerUser = async (evt) => {
         evt.preventDefault();
+        addUser({
+            variables: {
+                user
+            }
+        })
         console.log(user);
     };
 
@@ -77,4 +90,8 @@ export const FormRegister = () => {
             </Form>
         </section>
     );
+};
+
+FormRegister.propTypes = {
+    onRegister: PropTypes.func.isRequired,
 };

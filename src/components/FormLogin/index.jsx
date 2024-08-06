@@ -5,9 +5,17 @@ import { Form, FormActions } from "../Form";
 import { FormLabel } from "../FormLabel";
 import { TextField } from "../TextField";
 import { Figure, Heading, Image } from "./styles";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../../mutations/login";
+import PropTypes from 'prop-types';
 
-export const FormLogin = () => {
+export const FormLogin = ({ onRegister }) => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
+    const [login, { data, loading, error }] = useMutation(LOGIN, {
+        onCompleted: () => {
+            onRegister()
+        }
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,7 +27,11 @@ export const FormLogin = () => {
 
     const loginUser = (evt) => {
         evt.preventDefault();
-        console.log(credentials);
+        login({
+            variables: {
+                credentials
+            }
+        });
     };
 
     return (
@@ -65,4 +77,8 @@ export const FormLogin = () => {
             </Form>
         </section>
     );
+};
+
+FormLogin.propTypes = {
+    onRegister: PropTypes.func.isRequired,
 };
