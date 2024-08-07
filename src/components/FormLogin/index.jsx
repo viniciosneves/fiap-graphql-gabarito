@@ -12,7 +12,8 @@ import PropTypes from 'prop-types';
 export const FormLogin = ({ onRegister }) => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [login, { data, loading, error }] = useMutation(LOGIN, {
-        onCompleted: () => {
+        onCompleted: (data) => {
+            sessionStorage.setItem('token', data.login.accessToken)
             onRegister()
         }
     });
