@@ -4,6 +4,7 @@ import { Button } from "../Button"
 import { useMutation, useQuery } from "@apollo/client"
 import { GET_TRANSACTION_TYPES } from "../../queries/transactionTypes"
 import { ADD_TRANSACTION } from "../../mutations/addTransaction"
+import { GET_ACCOUNT } from "../../queries/account"
 
 export const TransactionForm = () => {
 
@@ -16,7 +17,10 @@ export const TransactionForm = () => {
         onCompleted: () => {
             setTransactionType('')
             setSetTransactionValue('')
-        }
+        },
+        refetchQueries: [
+            GET_ACCOUNT
+        ]
     });
 
     const createTransacion = (evt) => {
